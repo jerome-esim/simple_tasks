@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionnaire de Tâches</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🗂️</text></svg>">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🗂️ Gestionnaire de Tâches</h1>
+            <div class="header-actions">
+                <select id="projectSelect">
+                    <option value="">Sélectionner un projet...</option>
+                </select>
+                <button id="newProjectBtn" class="btn btn-primary">➕ Nouveau Projet</button>
+            </div>
+        </header>
+
+        <div id="projectView" style="display: none;">
+            <div class="project-header">
+                <h2 id="projectTitle"></h2>
+                <div class="project-actions">
+                    <button id="newCategoryBtn" class="btn btn-secondary">🏷️ Nouvelle Catégorie</button>
+                    <button id="newTaskBtn" class="btn btn-primary">✅ Nouvelle Tâche</button>
+                </div>
+            </div>
+
+            <div class="filters">
+                <select id="categoryFilter">
+                    <option value="">Toutes les catégories</option>
+                </select>
+                <select id="statusFilter">
+                    <option value="">Tous les statuts</option>
+                    <option value="todo">📋 À faire</option>
+                    <option value="in_progress">⚡ En cours</option>
+                    <option value="done">✅ Terminé</option>
+                </select>
+                <div class="stats" id="taskStats"></div>
+            </div>
+
+            <div id="tasksContainer" class="tasks-grid"></div>
+        </div>
+
+        <div id="welcomeMessage" class="welcome-message">
+            <h2>👋 Bienvenue dans votre gestionnaire de tâches</h2>
+            <p>Sélectionnez un projet pour commencer ou créez votre premier projet !</p>
+        </div>
+    </div>
+
+    <!-- Modales -->
+    <div id="projectModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>📝 Nouveau Projet</h3>
+            <form id="projectForm">
+                <div class="form-group">
+                    <label for="projectName">Nom du projet *</label>
+                    <input type="text" id="projectName" placeholder="Ex: Site web e-commerce" required>
+                </div>
+                <div class="form-group">
+                    <label for="projectDescription">Description</label>
+                    <textarea id="projectDescription" placeholder="Description du projet..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Créer le projet</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="categoryModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>🏷️ Nouvelle Catégorie</h3>
+            <form id="categoryForm">
+                <div class="form-group">
+                    <label for="categoryName">Nom de la catégorie *</label>
+                    <input type="text" id="categoryName" placeholder="Ex: Urgent, Design, Code..." required>
+                </div>
+                <div class="form-group">
+                    <label for="categoryColor">Couleur</label>
+                    <input type="color" id="categoryColor" value="#007bff">
+                </div>
+                <button type="submit" class="btn btn-primary">Créer la catégorie</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="taskModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3 id="taskModalTitle">✅ Nouvelle Tâche</h3>
+            <form id="taskForm">
+                <input type="hidden" id="taskId">
+                <div class="form-group">
+                    <label for="taskTitle">Titre de la tâche *</label>
+                    <input type="text" id="taskTitle" placeholder="Ex: Créer la page d'accueil" required>
+                </div>
+                <div class="form-group">
+                    <label for="taskDescription">Description</label>
+                    <textarea id="taskDescription" placeholder="Détails de la tâche..."></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="taskDeadline">Date limite</label>
+                        <input type="date" id="taskDeadline">
+                    </div>
+                    <div class="form-group">
+                        <label for="taskAssignedTo">Affecté à</label>
+                        <input type="text" id="taskAssignedTo" placeholder="Nom de la personne">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="taskCategory">Catégorie</label>
+                        <select id="taskCategory">
+                            <option value="">Aucune catégorie</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="taskStatus">Statut</label>
+                        <select id="taskStatus">
+                            <option value="todo">📋 À faire</option>
+                            <option value="in_progress">⚡ En cours</option>
+                            <option value="done">✅ Terminé</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">💾 Sauvegarder</button>
+                    <button type="button" id="deleteTaskBtn" class="btn btn-danger" style="display: none;">🗑️ Supprimer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
