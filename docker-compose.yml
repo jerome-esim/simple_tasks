@@ -6,7 +6,7 @@ services:
       - "3000:3000"
     environment:
       - NODE_ENV=production
-      - SECURE_PATH=${SECURE_PATH:-}
+      - SECURE_PATH=${SECURE_PATH}
     volumes:
       - task_data:/app/data
     restart: unless-stopped
