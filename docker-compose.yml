@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+  task-manager:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - SECURE_PATH=${SECURE_PATH:-}
+    volumes:
+      - task_data:/app/data
+    restart: unless-stopped
+    container_name: task-manager
+
+volumes:
+  task_data:
+    driver: local
