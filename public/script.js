@@ -81,29 +81,51 @@ class TaskManager {
         });
     }
 
-    async loadProjects() {
-        try {
-            const response = await fetch(`./api/projects`);
-            if (!response.ok) throw new Error('Erreur réseau');
+async loadProjects() {
+    try {
+        const response = await fetch(`./api/projects`);
+        if (!response.ok) throw new Error('Erreur réseau');
+        
+        const projects = await response.json();
+        
+        const select = document.getElementById('projectSelect');
+        select.innerHTML = '<option value="">Sélectionner un projet...</option>';
+        
+        let firstNonDemoProject = null;
+        
+        projects.forEach(project => {
+            const option = document.createElement('option');
+            option.value = project.id;
+            option.textContent = project.name;
+            select.appendChild(option);
             
-            const projects = await response.json();
-            
-            const select = document.getElementById('projectSelect');
-            select.innerHTML = '<option value="">Sélectionner un projet...</option>';
-            
-            projects.forEach(project => {
-                const option = document.createElement('option');
-                option.value = project.id;
-                option.textContent = project.name;
-                select.appendChild(option);
-            });
+            // ✅ Trouver le premier projet qui n'est pas "demo"
+            if (!firstNonDemoProject && 
+                !project.name.toLowerCase().includes('demo') && 
+                !project.name.toLowerCase().includes('exemple')) {
+                firstNonDemoProject = project;
+            }
+        });
 
+        // ✅ Sélectionner automatiquement le premier projet non-demo
+        if (firstNonDemoProject) {
+            select.value = firstNonDemoProject.id;
+            this.currentProjectId = firstNonDemoProject.id;
+            this.loadProject(firstNonDemoProject.id);
+        } else if (projects.length > 0) {
+            // Fallback: sélectionner le premier projet s'il n'y en a qu'un
+            select.value = projects[0].id;
+            this.currentProjectId = projects[0].id;
+            this.loadProject(projects[0].id);
+        } else {
             this.updateWelcomeVisibility();
-        } catch (error) {
-            console.error('Erreur lors du chargement des projets:', error);
-            this.showError('Impossible de charger les projets');
         }
+
+    } catch (error) {
+        console.error('Erreur lors du chargement des projets:', error);
+        this.showError('Impossible de charger les projets');
     }
+}
 
     async loadProject(projectId) {
         try {
